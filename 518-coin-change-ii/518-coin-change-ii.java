@@ -5,13 +5,15 @@ class Solution {
         dp[0] = 1;
         
         for(int val: coins){
-            for(int a = 0; a <= amount; a++){
-                if(a >= val){
-                    dp[a] += dp[a - val];
+            for(int i = 1; i < dp.length; i++){
+                if(i >= val){
+                    
+                    if(dp[i - val] > 0)
+                        dp[i] += dp[i - val];
                 }
             }
         }
         
-        return dp[amount];
+        return dp[dp.length - 1];
     }
 }
