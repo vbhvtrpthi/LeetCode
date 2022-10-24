@@ -26,26 +26,20 @@ class Solution {
         return root;
     }
 
-    public TreeNode construct(int pre_lo, int pre_hi, int in_lo, int in_hi, int[] preorder, HashMap<Integer, Integer> map) {
-        if (pre_lo == pre_hi) {
-            TreeNode node = new TreeNode();
-            node.val = preorder[pre_lo];
-            node.left = null;
-            node.right = null;
-
-            return node;
+    public TreeNode construct(int pre_lo, int pre_hi, int in_lo, int in_hi, int[] pre, HashMap<Integer, Integer> map) {
+        if (pre_lo > pre_hi) {
+            return null;
         }
-        
-        if(pre_lo > pre_hi)
-             return null;
 
         TreeNode node = new TreeNode();
-        node.val = preorder[pre_lo];
-        int idx = map.get(preorder[pre_lo]);
-        int lhs = idx - in_lo; //people in lhs
 
-        node.left = construct(pre_lo + 1, pre_lo + lhs, in_lo, idx - 1, preorder, map);
-        node.right = construct(pre_lo + lhs + 1, pre_hi, idx + 1, in_hi, preorder, map);
+        node.val = pre[pre_lo];
+
+        int index = map.getOrDefault(pre[pre_lo], 0);
+        int lhs = index - in_lo;
+
+        node.left = construct(pre_lo + 1, pre_lo + lhs, in_lo, index - 1, pre, map);
+        node.right = construct(pre_lo + lhs + 1, pre_hi, index + 1, in_hi, pre, map);
 
         return node;
     }
