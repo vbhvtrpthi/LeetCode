@@ -1,37 +1,43 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
 class Solution {
-    int count = 0;
-    int mod = 1000000007;
-    
+    int cnt = 0;
     public int pathSum(TreeNode root, int targetSum) {
-        ArrayList<TreeNode> list = new ArrayList<>();
-        travel1(root, list);
+        HashMap<Long, Long> map = new HashMap<>();
+        map.put(0L, 1L);
+        if (root == null) return 0;
 
-        for (TreeNode node : list) {
-            travel2(node, 0, targetSum);
-        }
-
-        return count;
+        pathSumHelper(root, (long)targetSum, map, root.val);
+        return cnt;
     }
 
-    public void travel1(TreeNode node, ArrayList<TreeNode> list) {
-        if (node == null) {
-            return;
+    public void pathSumHelper(TreeNode node, long tar, HashMap<Long, Long> map, long ps) {
+        if (map.containsKey(ps - tar)) cnt += map.get(ps - tar);
+
+        if (map.containsKey(ps)) {
+            map.put(ps, map.get(ps) + 1);
+        } else {
+            map.put(ps, 1L);
         }
 
-        list.add(node);
-        travel1(node.left, list);
-        travel1(node.right, list);
-    }
+        if (node.left != null) pathSumHelper(node.left, tar, map, ps + node.left.val);
+        if (node.right != null) pathSumHelper(node.right, tar, map, ps + node.right.val);
 
-    public void travel2(TreeNode node, int csum, int targetSum) {
-        if (node == null) {
-            return;
+        if (map.containsKey(ps)) {
+            map.put(ps, map.get(ps) - 1);
         }
-        if ((csum + node.val) % mod == targetSum) {
-            count++;
-        }
-
-        travel2(node.left, (csum + node.val) % mod, targetSum);
-        travel2(node.right, (csum + node.val) % mod, targetSum);
     }
 }
