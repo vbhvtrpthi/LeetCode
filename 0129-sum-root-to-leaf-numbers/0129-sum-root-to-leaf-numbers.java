@@ -1,36 +1,25 @@
-/**
- * Definition for a binary tree node.
- * public class TreeNode {
- *     int val;
- *     TreeNode left;
- *     TreeNode right;
- *     TreeNode() {}
- *     TreeNode(int val) { this.val = val; }
- *     TreeNode(int val, TreeNode left, TreeNode right) {
- *         this.val = val;
- *         this.left = left;
- *         this.right = right;
- *     }
- * }
- */
 class Solution {
     int sum = 0;
+
     public int sumNumbers(TreeNode root) {
-        sumNumbersHelper(root, "");
+        sumNumbersHelper(root, new StringBuilder());
         return sum;
     }
-    
-    public void sumNumbersHelper(TreeNode node, String psf){
-        if(node == null){
+
+    public void sumNumbersHelper(TreeNode node, StringBuilder psf) {
+        if (node == null) {
             return;
         }
-        if(node.left == null && node.right == null){
-            psf += node.val;
-            sum += Integer.parseInt(psf);
+        if (node.left == null && node.right == null) {
+            psf.append(node.val);
+            sum += Integer.parseInt(psf.toString());
+            psf.deleteCharAt(psf.length() - 1);
             return;
         }
         
-        sumNumbersHelper(node.left, psf + node.val);
-        sumNumbersHelper(node.right, psf + node.val);
+        psf.append(node.val);
+        sumNumbersHelper(node.left, psf);
+        sumNumbersHelper(node.right, psf);
+        psf.deleteCharAt(psf.length() - 1); //as string builder is made in heap;
     }
 }
